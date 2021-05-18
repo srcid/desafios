@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <iostream>
 
 using namespace std;
 
@@ -25,9 +24,7 @@ public:
         int evennums = 0;
         
         for (int x : nums) {
-
-            cout << x << " - " << ndig(x) << " - " << isEven(ndig(x)) << endl;
-
+            
             if (isEven(ndig(x)))
                 evennums++;
         }
