@@ -37,12 +37,19 @@ public:
         while ( (res = guess(hint)) ) {
             // hint é maior
             if (res == 1) {
-                end = hint;
+                end = hint - 1;
             // hint é menor
             } else {
-                beg = hint;
+                beg = hint + 1;
             }
-            hint = (end + beg)/2;
+            /**
+             * Essa abordagem causa overflow
+             * hint = (end + beg)/2;
+             *
+             * Improved Formula that does not cause overflow : 
+             * Average = (a / 2) + (b / 2) + (((a % 2) + (b % 2)) / 2)
+             */
+            hint = beg/2 + end/2 + (beg%2 + end%2)/2;
 
         }
         

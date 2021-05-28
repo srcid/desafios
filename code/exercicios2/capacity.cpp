@@ -1,55 +1,42 @@
-/***
- *  ESTÁ ERRADA  
- * 
- */
-
 #include <bits/stdc++.h>
 
 using namespace std;
 
-void print(int x) {
-    cout << "| " << x << " | ";
-} 
-
-template<class InputIterator>
-int prefix_sum_until_(InputIterator first, InputIterator last, int max) {
-    int tmp,
-        overflow = 0;
+template<class InputIterator, class T>
+int prefix_sum_until(InputIterator first, InputIterator last, T max) {
+    T acc = 0;
+    int count = 1;
     
-    while (first != last) {
-        tmp = *first + *(first++ + 1);
+    while (++first != last) {
+        acc = *first + *(first - 1);
         
-        if (tmp > max) {
-            overflow++;
+        if (acc > max) {
+            count++;
             continue;
-        } else if (tmp == max) {
-            overflow++;
+        } else if (acc == max && first + 1 != last) {
+            count++;
+            *first = acc;
+            first++;
+        } else {
+            *first = acc;
         }
-        
-        *first = tmp;
     }
 
-    return overflow;
+    return count;
 }
 class Solution {
 public:
     int shipWithinDays(vector<int>& weights, int days) {
-        int min_weight = ceil(accumulate(weights.begin(), weights.end(), 0) / days);
+        int min_weight = max(
+            (int)(ceil(accumulate(weights.begin(), weights.end(), 0) / days)),
+            *max_element(weights.begin(), weights.end())
+        );
 
-        for (int w : weights) {
-            if (w > min_weight) {
-                min_weight = w;
-            }
-        }
-        
         while (true) {
             vector<int> acc(weights);
-            int overflow = prefix_sum_until_(acc.begin(), acc.end(), min_weight);
+            int batchs_count = prefix_sum_until(acc.begin(), acc.end(), min_weight);
 
-            for_each(acc.begin(), acc.end(),print);
-            cout << " --- " << overflow << endl;
-
-            if (overflow <= days) {
+            if (batchs_count <= days) {
                 return min_weight;
             } else {
                 min_weight++;
@@ -66,12 +53,15 @@ int main(int argc, char const *argv[])
     int d2 = 3;
     vector<int> w3{1,2,3,4,5,6,7,8,9,10};
     int d3 = 5;
+    vector<int> w4{1,2,3,4,5,6,7,8,9,10};
+    int d4 = 1;
 
     Solution s;
 
     cout << s.shipWithinDays(w, d) << endl;
     cout << s.shipWithinDays(w2, d2) << endl;
     cout << s.shipWithinDays(w3, d3) << endl;
+    cout << s.shipWithinDays(w4, d4) << endl;
     
     return 0;
 }
