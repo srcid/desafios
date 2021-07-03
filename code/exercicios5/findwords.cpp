@@ -16,12 +16,10 @@ public:
             frq = chars_frq;
             
             for (char c : word) {
-                frq[c]--;
-            }
-            for (char c : word) {
-                if (frq[c] < 0) {
+                if (!frq[c]) {
                     goto donotcount;
                 }
+                frq[c]--;
             }
             
             length += word.length();
