@@ -18,6 +18,33 @@ void print_each(iterator begin, iterator end) {
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
+        int i, j, ans, dif;
+        vector<int> p;
+        
+        p.push_back(0);
+        
+        for_each(nums.begin(), nums.end(), [&p](auto e){
+            p.push_back(p.back()+e);
+        });
+        
+        ans = nums.size()+1;
+        i=0;
+        j=i+1;
+        
+        while (j < p.size()) {
+            if (p[j]-p[i] >= target) {
+                dif = j-i;
+                if (ans > dif) ans = dif;
+                i++;
+            } else {
+                j++;
+            }
+        }
+        
+        return ans == nums.size()+1 ? 0 : ans;
+    }
+
+    int minSubArrayLen2(int target, vector<int>& nums) {
         int i, j, dif;
         vector<int> p, res;
 
